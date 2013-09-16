@@ -35,11 +35,9 @@ import com.android.settings.R;
 public class AndroidBeam extends Fragment
         implements CompoundButton.OnCheckedChangeListener {
     private View mView;
-    private ImageView mImageView;
     private NfcAdapter mNfcAdapter;
     private Switch mActionBarSwitch;
     private CharSequence mOldActivityTitle;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,13 +76,14 @@ public class AndroidBeam extends Fragment
         initView(mView);
         return mView;
     }
+
     @Override
     public void onDestroyView() {
+        super.onDestroyView();
         getActivity().getActionBar().setCustomView(null);
         if (mOldActivityTitle != null) {
             getActivity().getActionBar().setTitle(mOldActivityTitle);
         }
-        super.onDestroyView();
     }
 
     private void initView(View view) {

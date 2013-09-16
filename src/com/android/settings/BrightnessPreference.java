@@ -15,7 +15,6 @@
  */
 
 package com.android.settings;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -467,4 +466,3 @@ public class BrightnessPreference extends SeekBarDialogPreference implements
         };
     }
 }
-

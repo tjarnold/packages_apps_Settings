@@ -22,9 +22,23 @@ import android.widget.Toast;
 
 import com.android.settings.util.CMDProcessor.CommandResult;
 
-public class Helpers {
+import android.os.SystemProperties;
 
-    private static final String TAG = "Helpers";
+// don't show unavoidable warnings
+@SuppressWarnings({
+        "UnusedDeclaration",
+        "MethodWithMultipleReturnPoints",
+        "ReturnOfNull",
+        "NestedAssignment",
+        "DynamicRegexReplaceableByCompiledPattern",
+        "BreakStatement"})
+public class Helpers {
+    // avoids hardcoding the tag
+    private static final String TAG = Thread.currentThread().getStackTrace()[1].getClassName();
+
+    public Helpers() {
+        // dummy constructor
+    }
 
     /**
      * Checks device for SuperUser permission

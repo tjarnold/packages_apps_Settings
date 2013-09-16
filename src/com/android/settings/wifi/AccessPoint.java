@@ -62,6 +62,8 @@ class AccessPoint extends Preference {
     int security;
     int networkId;
     boolean wpsAvailable = false;
+    boolean isIBSS = false;
+    int frequency;
 
     PskType pskType = PskType.UNKNOWN;
 
@@ -188,6 +190,8 @@ class AccessPoint extends Preference {
         security = getSecurity(config);
         networkId = config.networkId;
         mRssi = Integer.MAX_VALUE;
+        isIBSS = config.isIBSS;
+        frequency = config.frequency;
         mConfig = config;
     }
 
@@ -196,6 +200,8 @@ class AccessPoint extends Preference {
         bssid = result.BSSID;
         security = getSecurity(result);
         wpsAvailable = security != SECURITY_EAP && result.capabilities.contains("WPS");
+        isIBSS = result.capabilities.contains("[IBSS]");
+        frequency = result.frequency;
         if (security == SECURITY_PSK)
             pskType = getPskType(result);
         networkId = -1;
@@ -338,11 +344,7 @@ class AccessPoint extends Preference {
         setTitle(ssid);
 
         Context context = getContext();
-        if (mState != null) { // This is the active connection
-            setSummary(Summary.get(context, mState));
-        } else if (mRssi == Integer.MAX_VALUE) { // Wifi out of range
-            setSummary(context.getString(R.string.wifi_not_in_range));
-        } else if (mConfig != null && mConfig.status == WifiConfiguration.Status.DISABLED) {
+        if (mConfig != null && mConfig.status == WifiConfiguration.Status.DISABLED) {
             switch (mConfig.disableReason) {
                 case WifiConfiguration.DISABLED_AUTH_FAILURE:
                     setSummary(context.getString(R.string.wifi_disabled_password_failure));
@@ -354,6 +356,10 @@ class AccessPoint extends Preference {
                 case WifiConfiguration.DISABLED_UNKNOWN_REASON:
                     setSummary(context.getString(R.string.wifi_disabled_generic));
             }
+        } else if (mRssi == Integer.MAX_VALUE) { // Wifi out of range
+            setSummary(context.getString(R.string.wifi_not_in_range));
+        } else if (mState != null) { // This is the active connection
+            setSummary(Summary.get(context, mState));
         } else { // In range, not disabled.
             StringBuilder summary = new StringBuilder();
             if (mConfig != null) { // Is saved network
